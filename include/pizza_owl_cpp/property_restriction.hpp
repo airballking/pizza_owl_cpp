@@ -11,14 +11,7 @@ namespace property_restriction
    *
    */
 
-  class Thing
-  {
-//    public:
-//      const T& as<T>() const
-//      {
-//        return boost::dynamic_cast<const T>(*this);
-//      }
-  };
+  class Thing {};
 
   typedef typename std::shared_ptr<Thing> ThingPtr;
 
@@ -34,7 +27,7 @@ namespace property_restriction
   typedef typename std::shared_ptr<SpatialThing> SpatialThingPtr;
 
   /*
-   * CLASS DEFINITION: property_restriction::SpatialThing
+   * CLASS DEFINITION: property_restriction::Pizza
    *
    */
 
@@ -43,33 +36,52 @@ namespace property_restriction
   };
 
   typedef typename std::shared_ptr<Pizza> PizzaPtr;
- 
+
+  /*
+   * CLASS DEFINITION: property_restriction::ObjectManipulation
+   *
+   */
+
   class ObjectManipulation: public Thing
   {
     public:
-      const SpatialThing& getObjActedOn() const
+      SpatialThingPtr getObjActedOn() const
       {
         return objActedOn_;
       }
-  
-    protected:
-      SpatialThing objActedOn_;
-  };
-  
-//  class ServingPizza: public ObjectManipulation
-//  {
-//    public:
-//      const Pizza& getObjActedOn() const
-//      {
-//        return ObjectManipulation::getObjActedOn().as<Pizza>();
-//      }
-//  
-//      void setObjectActedOn(const Pizza& pizza)
-//      {
-//        objActedOn_ = pizza;
-//      }
-//  };
 
+      void setObjActedOn(SpatialThingPtr objActedOn)
+      {
+        objActedOn_ = objActedOn;
+      }
+  
+ 
+    protected:
+      SpatialThingPtr objActedOn_;
+  };
+
+  typedef typename std::shared_ptr<ObjectManipulation> ObjectManipulationPtr;
+
+  /*
+   * CLASS DEFINITION: property_restriction::ServingPizza
+   *
+   */
+
+  class ServingPizza: public ObjectManipulation
+  {
+    public:
+      PizzaPtr getObjActedOn() const
+      {
+        return std::static_pointer_cast<Pizza>(objActedOn_);
+      }
+  
+      void setObjectActedOn(PizzaPtr objActedOn)
+      {
+        objActedOn_ = objActedOn;
+      }
+  };
+
+  typedef typename std::shared_ptr<ServingPizza> ServingPizzaPtr;
 }
 
 #endif 
